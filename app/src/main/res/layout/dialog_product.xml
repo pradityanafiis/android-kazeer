@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp"
+    android:paddingTop="10dp">
+
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/spinner_product_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ms_text_color="@android:color/black"
+        app:ms_padding_left="8dp"
+        app:ms_padding_right="8dp"
+        app:ms_popup_padding_left="8dp"
+        app:ms_popup_padding_right="8dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_product_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_product_category">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            android:hint="Name"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_product_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/til_product_name">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_product_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Price" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_product_stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/til_product_price">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_product_stock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Stock" />
+    </com.google.android.material.textfield.TextInputLayout>
+</RelativeLayout>

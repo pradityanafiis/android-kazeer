@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transaction_navigation"
+    app:startDestination="@+id/navigation_choose_product">
+
+    <fragment
+        android:id="@+id/navigation_choose_product"
+        android:name="com.praditya.kazeer.view.ui.ChooseProductFragment"
+        android:label="Transaction"
+        tools:layout="@layout/fragment_choose_product"/>
+
+    <fragment
+        android:id="@+id/navigation_choose_customer"
+        android:name="com.praditya.kazeer.view.ui.ChooseCustomerFragment"
+        android:label="Choose Customer"
+        tools:layout="@layout/fragment_choose_customer"/>
+
+    <fragment
+        android:id="@+id/navigation_review_cart"
+        android:name="com.praditya.kazeer.view.ui.ReviewCartFragment"
+        android:label="Review Cart"
+        tools:layout="@layout/fragment_review_cart"/>
+
+</navigation>

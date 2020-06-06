@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.praditya.kazeer">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.ui.SplashScreenActivity"
+            android:theme="@style/SplashScreenStyle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.ui.TransactionActivity" />
+        <activity android:name=".view.ui.ProductActivity" />
+        <activity
+            android:name=".view.ui.CustomerActivity"
+            android:label="Manage Customer"
+            android:parentActivityName=".view.ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".view.ui.CategoryActivity"
+            android:label="Manage Category"
+            android:parentActivityName=".view.ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".view.ui.MainActivity"
+            android:label="@string/app_name">
+        </activity>
+    </application>
+
+</manifest>

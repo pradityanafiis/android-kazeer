@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ui.ManageFragment"
+    android:background="@color/colorLayoutBackground">
+
+    <androidx.cardview.widget.CardView
+        style="@style/CardViewManageMenu">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/manage_customer"
+                style="@style/RelativeLayoutManageMenu">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/IconManageMenu"
+                    android:id="@+id/icon_customer"
+                    android:src="@drawable/ic_person_black_24dp"/>
+                <TextView
+                    style="@style/TextManageMenu"
+                    android:layout_toRightOf="@id/icon_customer"
+                    android:text="Customer"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/NextIconManageMenu"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/manage_category"
+                android:layout_below="@id/manage_customer"
+                style="@style/RelativeLayoutManageMenu">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/IconManageMenu"
+                    android:id="@+id/icon_category"
+                    android:src="@drawable/ic_format_list_bulleted_black_24dp"/>
+                <TextView
+                    style="@style/TextManageMenu"
+                    android:layout_toRightOf="@id/icon_category"
+                    android:text="Category"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/NextIconManageMenu"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/manage_product"
+                android:layout_below="@id/manage_category"
+                style="@style/RelativeLayoutManageMenu">
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/IconManageMenu"
+                    android:id="@+id/icon_product"
+                    android:src="@drawable/ic_shopping_basket_black_24dp"/>
+                <TextView
+                    style="@style/TextManageMenu"
+                    android:layout_toRightOf="@id/icon_product"
+                    android:text="Product"/>
+                <androidx.appcompat.widget.AppCompatImageView
+                    style="@style/NextIconManageMenu"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--<androidx.cardview.widget.CardView-->
+<!--style="@style/CardViewManageMenu"-->
+<!--android:id="@+id/manage_customer">-->
+<!--<RelativeLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="15dp">-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        style="@style/IconManageMenu"-->
+<!--        android:id="@+id/icon_customer"-->
+<!--        android:src="@drawable/ic_person_black_24dp"/>-->
+
+<!--    <TextView-->
+<!--        style="@style/TextManageMenu"-->
+<!--        android:layout_toRightOf="@id/icon_customer"-->
+<!--        android:text="Customer"/>-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        style="@style/NextIconManageMenu"/>-->
+<!--</RelativeLayout>-->
+<!--</androidx.cardview.widget.CardView>-->
+
+<!--<androidx.cardview.widget.CardView-->
+<!--style="@style/CardViewManageMenu"-->
+<!--android:id="@+id/manage_category"-->
+<!--android:layout_below="@id/manage_customer">-->
+<!--<RelativeLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="15dp">-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        style="@style/IconManageMenu"-->
+<!--        android:id="@+id/icon_category"-->
+<!--        android:src="@drawable/ic_format_list_bulleted_black_24dp"/>-->
+
+<!--    <TextView-->
+<!--        style="@style/TextManageMenu"-->
+<!--        android:layout_toRightOf="@id/icon_category"-->
+<!--        android:text="Category"/>-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        style="@style/NextIconManageMenu"/>-->
+<!--</RelativeLayout>-->
+<!--</androidx.cardview.widget.CardView>-->
+
+<!--<androidx.cardview.widget.CardView-->
+<!--style="@style/CardViewManageMenu"-->
+<!--android:id="@+id/manage_product"-->
+<!--android:layout_below="@id/manage_category">-->
+<!--<RelativeLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="15dp">-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        style="@style/IconManageMenu"-->
+<!--        android:id="@+id/icon_product"-->
+<!--        android:src="@drawable/ic_shopping_basket_black_24dp"/>-->
+
+<!--    <TextView-->
+<!--        style="@style/TextManageMenu"-->
+<!--        android:layout_toRightOf="@id/icon_product"-->
+<!--        android:text="Product"/>-->
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        style="@style/NextIconManageMenu"/>-->
+<!--</RelativeLayout>-->
+<!--</androidx.cardview.widget.CardView>-->

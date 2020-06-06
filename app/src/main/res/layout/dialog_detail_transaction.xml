@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/colorLayoutBackground">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_customer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/StandartTextView"
+                    android:textStyle="bold"
+                    tools:text="@tools:sample/full_names"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_customer_telephone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_customer_name"
+                    tools:text="@tools:sample/us_phones"/>
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cv_customer"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_product_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_cart_review_product" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_transaction_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cv_product_list"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_noi"
+                    style="@style/StandartTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/tv_num_noi"
+                    android:text="Number of items"
+                    android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_num_noi"
+                    style="@style/StandartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_total"
+                    style="@style/StandartTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_noi"
+                    android:layout_toStartOf="@id/tv_num_total"
+                    android:text="Total"
+                    android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_num_total"
+                    style="@style/StandartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_num_noi"
+                    android:layout_alignParentEnd="true"
+                    android:text="Rp20.000" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_payment"
+                    style="@style/StandartTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_total"
+                    android:layout_toStartOf="@id/tv_num_payment"
+                    android:text="Cash payment"
+                    android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_num_payment"
+                    style="@style/StandartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_num_total"
+                    android:layout_alignParentEnd="true"
+                    android:text="Rp25.000" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_change"
+                    style="@style/StandartTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_payment"
+                    android:layout_toStartOf="@id/tv_num_payment"
+                    android:text="Change"
+                    android:textStyle="bold" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_num_change"
+                    style="@style/StandartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_num_payment"
+                    android:layout_alignParentEnd="true"
+                    android:text="Rp5.000" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>
