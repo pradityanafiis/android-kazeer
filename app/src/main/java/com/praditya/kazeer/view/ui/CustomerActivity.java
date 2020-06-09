@@ -23,6 +23,7 @@ import com.praditya.kazeer.model.Customer;
 import com.praditya.kazeer.view.DividerItemDecorator;
 import com.praditya.kazeer.view.adapter.CustomerAdapter;
 import com.praditya.kazeer.view.dialog.CustomerDialog;
+import com.praditya.kazeer.view.dialog.ShowCustomerDialog;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CustomerActivity extends AppCompatActivity implements CustomerDialog.DialogListener {
+public class CustomerActivity extends AppCompatActivity implements CustomerAdapter.OnClickCallback, CustomerDialog.DialogListener {
     @BindView(R.id.rv_customer) RecyclerView rvCustomer;
     @BindView(R.id.progress_circular) ProgressBar progressBar;
     private CustomerAdapter adapter;
@@ -86,6 +87,7 @@ public class CustomerActivity extends AppCompatActivity implements CustomerDialo
 
     private void init() {
         adapter = new CustomerAdapter(CustomerActivity.this);
+        adapter.setOnClickCallback(this);
         rvCustomer.setHasFixedSize(true);
         rvCustomer.setLayoutManager(new LinearLayoutManager(CustomerActivity.this));
         rvCustomer.setAdapter(adapter);
@@ -93,18 +95,6 @@ public class CustomerActivity extends AppCompatActivity implements CustomerDialo
         rvCustomer.addItemDecoration(dividerItemDecoration);
 
         refreshCustomer();
-    }
-
-    @OnClick(R.id.btn_create_customer)
-    void openCreateDialog() {
-        CustomerDialog customerDialog = new CustomerDialog("Create Customer", false);
-        customerDialog.show(getSupportFragmentManager(), "Customer");
-    }
-
-    private void openEditDialog(Customer customer) {
-        CustomerDialog customerDialog = new CustomerDialog("Edit Customer", true);
-        customerDialog.setCustomer(customer);
-        customerDialog.show(getSupportFragmentManager(), "Customer");
     }
 
     private void refreshCustomer() {
@@ -117,17 +107,6 @@ public class CustomerActivity extends AppCompatActivity implements CustomerDialo
                 if (!error){
                     ArrayList<Customer> customers = response.body().getData();
                     adapter.setCustomers(customers);
-                    adapter.setOnClickCallback(new CustomerAdapter.OnClickCallback() {
-                        @Override
-                        public void destroyCustomer(Customer customer) {
-                            deleteCustomer(customer);
-                        }
-
-                        @Override
-                        public void updateCustomer(Customer customer) {
-                            openEditDialog(customer);
-                        }
-                    });
                 }else {
                     showMessage(response.body().getMessage());
                 }
@@ -140,6 +119,12 @@ public class CustomerActivity extends AppCompatActivity implements CustomerDialo
                 showMessage(t.getMessage());
             }
         });
+    }
+
+    @OnClick(R.id.btn_create_customer)
+    void openCreateDialog() {
+        CustomerDialog customerDialog = new CustomerDialog("Create Customer", false);
+        customerDialog.show(getSupportFragmentManager(), "Customer");
     }
 
     @Override
@@ -166,6 +151,36 @@ public class CustomerActivity extends AppCompatActivity implements CustomerDialo
     }
 
     @Override
+    public void destroyCustomer(Customer customer) {
+        showLoading(true);
+        services.deleteCustomer(customer.getId()).enqueue(new Callback<SingleResponse<Customer>>() {
+            @Override
+            public void onResponse(Call<SingleResponse<Customer>> call, Response<SingleResponse<Customer>> response) {
+                showLoading(false);
+                boolean error = response.body().isError();
+                if (!error) {
+                    refreshCustomer();
+                }
+                showMessage(response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<SingleResponse<Customer>> call, Throwable t) {
+                showLoading(false);
+                t.printStackTrace();
+                showMessage(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) {
+        CustomerDialog customerDialog = new CustomerDialog("Edit Customer", true);
+        customerDialog.setCustomer(customer);
+        customerDialog.show(getSupportFragmentManager(), "Customer");
+    }
+
+    @Override
     public void editCustomer(Customer customer) {
         showLoading(true);
         services.editCustomer(customer.getId(), customer).enqueue(new Callback<SingleResponse<Customer>>() {
@@ -188,26 +203,10 @@ public class CustomerActivity extends AppCompatActivity implements CustomerDialo
         });
     }
 
-    private void deleteCustomer(Customer customer) {
-        showLoading(true);
-        services.deleteCustomer(customer.getId()).enqueue(new Callback<SingleResponse<Customer>>() {
-            @Override
-            public void onResponse(Call<SingleResponse<Customer>> call, Response<SingleResponse<Customer>> response) {
-                showLoading(false);
-                boolean error = response.body().isError();
-                if (!error) {
-                    refreshCustomer();
-                }
-                showMessage(response.body().getMessage());
-            }
-
-            @Override
-            public void onFailure(Call<SingleResponse<Customer>> call, Throwable t) {
-                showLoading(false);
-                t.printStackTrace();
-                showMessage(t.getMessage());
-            }
-        });
+    @Override
+    public void showCustomer(Customer customer) {
+        ShowCustomerDialog showCustomerDialog = new ShowCustomerDialog(this, customer);
+        showCustomerDialog.show(getSupportFragmentManager(), "Show Customer");
 
     }
 

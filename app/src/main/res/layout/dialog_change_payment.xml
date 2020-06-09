@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_title_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        style="@style/StandartTextView"
+        android:textSize="40sp"
+        android:text="Payment Change"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title_change"
+        android:gravity="center"
+        style="@style/StandartTextView"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:text="Rp25.000"/>
+</RelativeLayout>

@@ -31,6 +31,7 @@ import com.praditya.kazeer.model.Transaction;
 import com.praditya.kazeer.view.DividerItemDecorator;
 import com.praditya.kazeer.view.adapter.ChooseProductAdapter;
 import com.praditya.kazeer.view.adapter.ProductCartReviewAdapter;
+import com.praditya.kazeer.view.dialog.PaymentChangeDialog;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class ReviewCartFragment extends Fragment {
     private ProductCartReviewAdapter adapter;
     private Services services = ApiClient.getServices();
     private KazeerDatabase kazeerDatabase;
+    private int cashPayment;
     @BindView(R.id.rv_product_list)
     RecyclerView rvProductList;
     @BindView(R.id.tv_num_noi)
@@ -56,28 +58,18 @@ public class ReviewCartFragment extends Fragment {
     TextView tvTotalPice;
     @BindView(R.id.et_pay)
     EditText etPay;
-
+    @BindView(R.id.btn_create_transaction)
+    Button btnCreateTransaction;
     @OnClick(R.id.btn_create_transaction)
     void onClickCreateTransaction() {
-        int pay = 0;
-        try {
-            pay = Integer.parseInt(etPay.getText().toString().trim());
-        } catch (NumberFormatException e) {
-            showMessage(e.getMessage(), "error");
+        Customer customer = (Customer) getArguments().getSerializable("customer");
+        ArrayList<ProductTransaction> productTransactions = new ArrayList<>();
+        for (Cart cart : getCarts()) {
+            ProductTransaction productTransaction = new ProductTransaction(cart.getProductId(), cart.getProductName(), cart.getPrice(), cart.getQuantity(), cart.getTotalPrice());
+            productTransactions.add(productTransaction);
         }
-
-        if (pay < getTotalPrice()) {
-            showMessage("Uangmu kurang :(", "warning");
-        } else {
-            Customer customer = (Customer) getArguments().getSerializable("customer");
-            ArrayList<ProductTransaction> productTransactions = new ArrayList<>();
-            for (Cart cart : getCarts()) {
-                ProductTransaction productTransaction = new ProductTransaction(cart.getProductId(), cart.getProductName(), cart.getPrice(), cart.getQuantity(), cart.getTotalPrice());
-                productTransactions.add(productTransaction);
-            }
-            Transaction transaction = new Transaction(customer.getId(), getTotalPrice(), pay, pay - getTotalPrice(), productTransactions);
-            createTransaction(transaction);
-        }
+        Transaction transaction = new Transaction(customer.getId(), getTotalPrice(), getCashPayment(), getCashPayment() - getTotalPrice(), productTransactions);
+        createTransaction(transaction);
     }
 
     @Override
@@ -99,6 +91,47 @@ public class ReviewCartFragment extends Fragment {
         rvProductList.addItemDecoration(dividerItemDecoration);
         tvNumberofItems.setText(getTotalItems() + " items");
         tvTotalPice.setText(formatRupiah(getTotalPrice()));
+        btnCreateTransaction.setVisibility(View.INVISIBLE);
+        etPay.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                btnCreateTransaction.setVisibility(View.INVISIBLE);
+                if (charSequence.length() != 0) {
+                    String payString = charSequence.toString().trim();
+                    int cashPayment = 0;
+                    try {
+                        cashPayment = Integer.parseInt(payString);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (cashPayment >= getTotalPrice()) {
+                        btnCreateTransaction.setVisibility(View.VISIBLE);
+                        setCashPayment(cashPayment);
+                    } else {
+                        btnCreateTransaction.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    public int getCashPayment() {
+        return cashPayment;
+    }
+
+    public void setCashPayment(int cashPayment) {
+        this.cashPayment = cashPayment;
     }
 
     private ArrayList<Cart> getCarts() {
@@ -120,8 +153,9 @@ public class ReviewCartFragment extends Fragment {
                 boolean error = response.body().isError();
                 if (!error) {
                     kazeerDatabase.cartDao().clearCart();
-                    showMessage("Change : " + formatRupiah(transaction.getChange()), "success");
                     getParentFragmentManager().popBackStack("Choose Product", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    PaymentChangeDialog paymentChangeDialog = new PaymentChangeDialog(getContext(), transaction.getChange());
+                    paymentChangeDialog.show(getParentFragmentManager(), "Payment Change");
                 } else {
                     showMessage(response.body().getMessage(), "error");
                 }

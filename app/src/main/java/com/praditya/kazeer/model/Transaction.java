@@ -8,19 +8,25 @@ import java.util.Date;
 
 public class Transaction {
     private int id;
+
     @SerializedName("customer_id")
-    @Expose
     private int customerId;
+
+    @SerializedName("invoice_number")
     private String invoiceNumber;
+
     private int amount;
+
     private int pay;
+
     private int change;
+
     @SerializedName("created_at")
-    @Expose
     private String date;
+
     private Customer customer;
+
     @SerializedName("products")
-    @Expose
     private ArrayList<ProductTransaction> productTransactions;
 
     public Transaction(int customerId, int amount, int pay, int change, ArrayList<ProductTransaction> productTransactions) {

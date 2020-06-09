@@ -62,6 +62,9 @@ public interface Services {
     @GET("product")
     Call<MultipleResponse<Product>> getProduct();
 
+    @GET("product/available")
+    Call<MultipleResponse<Product>> getProductAvailable();
+
     @POST("product")
     Call<SingleResponse<Product>> createProduct(
         @Body Product product

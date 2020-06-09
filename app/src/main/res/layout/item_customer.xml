@@ -19,14 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/StandartTextView"
-            android:textStyle="bold"
             tools:text="@tools:sample/full_names"/>
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_customer_telephone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_customer_name"
-            style="@style/StandartTextView"
-            tools:text="@tools:sample/us_phones"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

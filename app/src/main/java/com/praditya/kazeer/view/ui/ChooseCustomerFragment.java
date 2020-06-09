@@ -2,6 +2,8 @@ package com.praditya.kazeer.view.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -12,8 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +43,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChooseCustomerFragment extends Fragment implements ChooseCustomerAdapter.OnClickCallback {
+    private ChooseCustomerAdapter adapter;
+    private Services services = ApiClient.getServices();
+    private Customer customer = null;
     @BindView(R.id.rv_customer)
     RecyclerView rvCustomer;
     @BindView(R.id.progress_circular)
@@ -61,10 +70,6 @@ public class ChooseCustomerFragment extends Fragment implements ChooseCustomerAd
         }
     }
 
-    private ChooseCustomerAdapter adapter;
-    private Services services = ApiClient.getServices();
-    private Customer customer = null;
-
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
@@ -76,6 +81,35 @@ public class ChooseCustomerFragment extends Fragment implements ChooseCustomerAd
         ButterKnife.bind(this, view);
         init();
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search_menu:
+                androidx.appcompat.widget.SearchView searchView = (SearchView) item.getActionView();
+                searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        adapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void init() {

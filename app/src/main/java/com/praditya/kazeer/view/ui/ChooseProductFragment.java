@@ -44,6 +44,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChooseProductFragment extends Fragment implements ChooseProductAdapter.OnClickCallback {
+    private ChooseProductAdapter adapter;
+    private Services services = ApiClient.getServices();
+    private KazeerDatabase kazeerDatabase;
     @BindView(R.id.rv_product)
     RecyclerView rvProduct;
     @BindView(R.id.progress_circular)
@@ -65,10 +68,6 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
                     .commit();
         }
     }
-
-    private ChooseProductAdapter adapter;
-    private Services services = ApiClient.getServices();
-    private KazeerDatabase kazeerDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,7 +126,7 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
 
     private void refreshProduct() {
         showLoading(true);
-        services.getProduct().enqueue(new Callback<MultipleResponse<Product>>() {
+        services.getProductAvailable().enqueue(new Callback<MultipleResponse<Product>>() {
             @Override
             public void onResponse(Call<MultipleResponse<Product>> call, Response<MultipleResponse<Product>> response) {
                 showLoading(false);

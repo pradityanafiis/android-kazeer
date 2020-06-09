@@ -32,11 +32,12 @@ public class DetailTransactionDialog extends BottomSheetDialogFragment {
     private Transaction transaction;
     private Context context;
     private ProductTransactionDetailAdapter adapter;
-
+    @BindView(R.id.tv_transaction_date)
+    TextView tvTransactionDate;
+    @BindView(R.id.tv_invoice_number)
+    TextView tvInvoiceNumber;
     @BindView(R.id.tv_customer_name)
     TextView tvCustomerName;
-    @BindView(R.id.tv_customer_telephone)
-    TextView tvCustomerTelephone;
     @BindView(R.id.rv_product_list)
     RecyclerView rvProductList;
     @BindView(R.id.tv_num_noi)
@@ -64,8 +65,9 @@ public class DetailTransactionDialog extends BottomSheetDialogFragment {
 
     private void init() {
         Customer customer = transaction.getCustomer();
+        tvTransactionDate.setText(transaction.getDate());
+        tvInvoiceNumber.setText(transaction.getInvoiceNumber());
         tvCustomerName.setText(customer.getName());
-        tvCustomerTelephone.setText(customer.getTelephone());
         tvNumberofItems.setText(transaction.getProductTransactions().size() + " items");
         tvTotalPrice.setText(formatRupiah(transaction.getAmount()));
         tvPayment.setText(formatRupiah(transaction.getPay()));

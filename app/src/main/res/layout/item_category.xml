@@ -14,11 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             style="@style/StandartTextView"
             tools:text="@tools:sample/lorem"/>
     </RelativeLayout>

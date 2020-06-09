@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="Search Category"
+        android:title="Search"
         android:id="@+id/search_menu"
         android:icon="@drawable/ic_baseline_search_black_24"
         app:showAsAction="ifRoom|collapseActionView"

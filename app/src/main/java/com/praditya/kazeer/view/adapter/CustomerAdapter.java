@@ -47,9 +47,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ListVi
     }
 
     public class ListViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.cv_customer) CardView cvCustomer;
-        @BindView(R.id.tv_customer_name) TextView tvCustomerName;
-        @BindView(R.id.tv_customer_telephone) TextView tvCustomerTelephone;
+        @BindView(R.id.cv_customer)
+        CardView cvCustomer;
+        @BindView(R.id.tv_customer_name)
+        TextView tvCustomerName;
 
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,7 +60,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ListVi
 
     public interface OnClickCallback {
         void destroyCustomer(Customer customer);
+
         void updateCustomer(Customer customer);
+
+        void showCustomer(Customer customer);
     }
 
     @NonNull
@@ -73,7 +77,12 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ListVi
     public void onBindViewHolder(@NonNull CustomerAdapter.ListViewHolder holder, int position) {
         Customer customer = customers.get(position);
         holder.tvCustomerName.setText(customer.getName());
-        holder.tvCustomerTelephone.setText(customer.getTelephone());
+        holder.cvCustomer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickCallback.showCustomer(customer);
+            }
+        });
         holder.cvCustomer.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
             public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
@@ -83,6 +92,7 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ListVi
                 MenuItem edit = contextMenu.add(holder.getAdapterPosition(), 2, 1, "Edit");
                 edit.setOnMenuItemClickListener(onMenuItemClickListener);
             }
+
             MenuItem.OnMenuItemClickListener onMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
@@ -116,12 +126,10 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ListVi
             ArrayList<Customer> filteredCustomers = new ArrayList<>();
             if (charSequence == null && charSequence.length() == 0) {
                 filteredCustomers.addAll(unfilteredCustomers);
-            }else {
+            } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (Customer customer: unfilteredCustomers) {
+                for (Customer customer : unfilteredCustomers) {
                     if (customer.getName().toLowerCase().contains(filterPattern))
-                        filteredCustomers.add(customer);
-                    else if (customer.getTelephone().contains(filterPattern))
                         filteredCustomers.add(customer);
                 }
             }
