@@ -50,11 +50,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ListView
     }
 
     public class ListViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.cv_product) CardView cvProduct;
-        @BindView(R.id.tv_product_category) TextView tvProductCategory;
-        @BindView(R.id.tv_product_name) TextView tvProductName;
-        @BindView(R.id.tv_product_price) TextView tvProductPrice;
-        @BindView(R.id.tv_product_stock) TextView tvProductStock;
+        @BindView(R.id.cv_product)
+        CardView cvProduct;
+        @BindView(R.id.tv_product_category)
+        TextView tvProductCategory;
+        @BindView(R.id.tv_product_name)
+        TextView tvProductName;
+        @BindView(R.id.tv_product_price)
+        TextView tvProductPrice;
+        @BindView(R.id.tv_product_stock)
+        TextView tvProductStock;
 
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,7 +69,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ListView
 
     public interface OnClickCallback {
         void destroyProduct(Product product);
+
         void updateProduct(Product product);
+
+        void adjustStock(Product product);
     }
 
     @NonNull
@@ -95,7 +103,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ListView
                 delete.setOnMenuItemClickListener(onMenuItemClickListener);
                 MenuItem edit = contextMenu.add(holder.getAdapterPosition(), 2, 1, "Edit");
                 edit.setOnMenuItemClickListener(onMenuItemClickListener);
+                MenuItem adjustStock = contextMenu.add(position, 3, 2, "Adjust Stock");
+                adjustStock.setOnMenuItemClickListener(onMenuItemClickListener);
             }
+
             MenuItem.OnMenuItemClickListener onMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
@@ -105,6 +116,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ListView
                             break;
                         case 2:
                             onClickCallback.updateProduct(product);
+                            break;
+                        case 3:
+                            onClickCallback.adjustStock(product);
                             break;
                     }
                     return false;
@@ -129,9 +143,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ListView
             ArrayList<Product> filteredProducts = new ArrayList<>();
             if (charSequence == null && charSequence.length() == 0) {
                 filteredProducts.addAll(unfilteredProducts);
-            }else {
+            } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (Product product: unfilteredProducts) {
+                for (Product product : unfilteredProducts) {
                     if (product.getName().toLowerCase().contains(filterPattern))
                         filteredProducts.add(product);
                 }
@@ -149,7 +163,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ListView
         }
     };
 
-    private String formatRupiah(int number){
+    private String formatRupiah(int number) {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
         return numberFormat.format(number);
     }

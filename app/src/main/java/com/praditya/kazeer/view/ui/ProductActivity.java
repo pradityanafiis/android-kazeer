@@ -22,6 +22,7 @@ import com.praditya.kazeer.api.response.SingleResponse;
 import com.praditya.kazeer.model.Product;
 import com.praditya.kazeer.view.DividerItemDecorator;
 import com.praditya.kazeer.view.adapter.ProductAdapter;
+import com.praditya.kazeer.view.dialog.AdjustStockDialog;
 import com.praditya.kazeer.view.dialog.CustomerDialog;
 import com.praditya.kazeer.view.dialog.ProductDialog;
 
@@ -34,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductActivity extends AppCompatActivity implements ProductDialog.DialogListener {
+public class ProductActivity extends AppCompatActivity implements ProductAdapter.OnClickCallback, ProductDialog.DialogListener, AdjustStockDialog.DialogListener {
     @BindView(R.id.rv_product) RecyclerView rvProduct;
     @BindView(R.id.progress_circular) ProgressBar progressBar;
     private ProductAdapter adapter;
@@ -87,24 +88,13 @@ public class ProductActivity extends AppCompatActivity implements ProductDialog.
 
     private void init() {
         adapter = new ProductAdapter(ProductActivity.this);
+        adapter.setOnClickCallback(this);
         rvProduct.setHasFixedSize(true);
         rvProduct.setLayoutManager(new LinearLayoutManager(ProductActivity.this));
         rvProduct.setAdapter(adapter);
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecorator(ContextCompat.getDrawable(ProductActivity.this, R.drawable.divider));
         rvProduct.addItemDecoration(dividerItemDecoration);
         refreshProduct();
-    }
-
-    @OnClick(R.id.btn_create_product)
-    void openCreateDialog() {
-        ProductDialog productDialog = new ProductDialog("Create Product", false);
-        productDialog.show(getSupportFragmentManager(), "Product");
-    }
-
-    private void openEditDialog(Product product) {
-        ProductDialog productDialog = new ProductDialog("Edit Product", true);
-        productDialog.setProduct(product);
-        productDialog.show(getSupportFragmentManager(), "Product");
     }
 
     private void refreshProduct() {
@@ -116,17 +106,6 @@ public class ProductActivity extends AppCompatActivity implements ProductDialog.
                 boolean error = response.body().isError();
                 if (!error) {
                     adapter.setProducts(response.body().getData());
-                    adapter.setOnClickCallback(new ProductAdapter.OnClickCallback() {
-                        @Override
-                        public void destroyProduct(Product product) {
-                            deleteProduct(product);
-                        }
-
-                        @Override
-                        public void updateProduct(Product product) {
-                            openEditDialog(product);
-                        }
-                    });
                 }else {
                     showMessage(response.body().getMessage());
                 }
@@ -139,6 +118,12 @@ public class ProductActivity extends AppCompatActivity implements ProductDialog.
                 showMessage(t.getMessage());
             }
         });
+    }
+
+    @OnClick(R.id.btn_create_product)
+    void openCreateDialog() {
+        ProductDialog productDialog = new ProductDialog("Create Product", false);
+        productDialog.show(getSupportFragmentManager(), "Product");
     }
 
     @Override
@@ -164,6 +149,36 @@ public class ProductActivity extends AppCompatActivity implements ProductDialog.
     }
 
     @Override
+    public void destroyProduct(Product product) {
+        showLoading(true);
+        services.deleteProduct(product.getId()).enqueue(new Callback<SingleResponse<Product>>() {
+            @Override
+            public void onResponse(Call<SingleResponse<Product>> call, Response<SingleResponse<Product>> response) {
+                showLoading(false);
+                boolean error = response.body().isError();
+                if (!error) {
+                    refreshProduct();
+                }
+                showMessage(response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<SingleResponse<Product>> call, Throwable t) {
+                showLoading(false);
+                t.printStackTrace();
+                showMessage(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void updateProduct(Product product) {
+        ProductDialog productDialog = new ProductDialog("Edit Product", true);
+        productDialog.setProduct(product);
+        productDialog.show(getSupportFragmentManager(), "Product");
+    }
+
+    @Override
     public void editProduct(Product product) {
         showLoading(true);
         services.editProduct(product.getId(), product).enqueue(new Callback<SingleResponse<Product>>() {
@@ -185,16 +200,22 @@ public class ProductActivity extends AppCompatActivity implements ProductDialog.
         });
     }
 
-    private void deleteProduct(Product product) {
+    @Override
+    public void adjustStock(Product product) {
+        AdjustStockDialog adjustStockDialog = new AdjustStockDialog(product);
+        adjustStockDialog.show(getSupportFragmentManager(), "Adjust Stock");
+    }
+
+    @Override
+    public void updateStock(Product product) {
         showLoading(true);
-        services.deleteProduct(product.getId()).enqueue(new Callback<SingleResponse<Product>>() {
+        services.editProduct(product.getId(), product).enqueue(new Callback<SingleResponse<Product>>() {
             @Override
             public void onResponse(Call<SingleResponse<Product>> call, Response<SingleResponse<Product>> response) {
                 showLoading(false);
                 boolean error = response.body().isError();
-                if (!error) {
+                if (!error)
                     refreshProduct();
-                }
                 showMessage(response.body().getMessage());
             }
 

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.praditya.kazeer.R;
 import com.praditya.kazeer.api.ApiClient;
@@ -28,20 +30,27 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductDialog extends AppCompatDialogFragment {
-    @BindView(R.id.spinner_product_category) MaterialSpinner spinnerProductCategory;
-    @BindView(R.id.et_product_name) EditText etProductName;
-    @BindView(R.id.et_product_price) EditText etProductPrice;
-    @BindView(R.id.et_product_stock) EditText etProductStock;
     private String title;
     private boolean isEditing;
     private Product product;
     private DialogListener dialogListener;
     private ArrayList<Category> categories;
+    @BindView(R.id.spinner_product_category)
+    MaterialSpinner spinnerProductCategory;
+    @BindView(R.id.et_product_name)
+    EditText etProductName;
+    @BindView(R.id.et_product_price)
+    EditText etProductPrice;
+    @BindView(R.id.et_product_stock)
+    EditText etProductStock;
+    @BindView(R.id.til_product_stock)
+    TextInputLayout tilProductStock;
 
     public ProductDialog(String title, boolean isEditing) {
         this.title = title;
@@ -82,13 +91,14 @@ public class ProductDialog extends AppCompatDialogFragment {
         super.onAttach(context);
         try {
             dialogListener = (DialogListener) context;
-        }catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + "must implement DialogListener");
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement DialogListener");
         }
     }
 
     public interface DialogListener {
         void createProduct(Product product);
+
         void editProduct(Product product);
     }
 
@@ -98,6 +108,7 @@ public class ProductDialog extends AppCompatDialogFragment {
             etProductName.setText(product.getName());
             etProductPrice.setText(String.valueOf(product.getPrice()));
             etProductStock.setText(String.valueOf(product.getStock()));
+            etProductStock.setEnabled(false);
         }
     }
 
@@ -108,17 +119,17 @@ public class ProductDialog extends AppCompatDialogFragment {
         String stringStock = etProductStock.getText().toString().trim();
 
         if (name.isEmpty()) {
-            showMessage("Product name required");
+            showMessage("Product name required", "error");
             ready = false;
         }
 
         if (stringPrice.isEmpty()) {
-            showMessage("Product price required");
+            showMessage("Product price required", "error");
             ready = false;
         }
 
         if (stringStock.isEmpty()) {
-            showMessage("Product stock required");
+            showMessage("Product stock required", "error");
             ready = false;
         }
 
@@ -126,7 +137,7 @@ public class ProductDialog extends AppCompatDialogFragment {
         try {
             price = Integer.parseInt(stringPrice);
         } catch (NumberFormatException e) {
-            showMessage("Product price only accept number");
+            showMessage("Product price only accept number", "error");
             ready = false;
         }
 
@@ -134,7 +145,7 @@ public class ProductDialog extends AppCompatDialogFragment {
         try {
             stock = Integer.parseInt(stringStock);
         } catch (NumberFormatException e) {
-            showMessage("Product stock only accept number");
+            showMessage("Product stock only accept number", "error");
             ready = false;
         }
 
@@ -161,7 +172,7 @@ public class ProductDialog extends AppCompatDialogFragment {
                 if (!error) {
                     categories = response.body().getData();
                     ArrayList<String> categoryName = new ArrayList<>();
-                    for (Category category: categories) {
+                    for (Category category : categories) {
                         categoryName.add(category.getName());
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, categoryName);
@@ -181,7 +192,19 @@ public class ProductDialog extends AppCompatDialogFragment {
         });
     }
 
-    private void showMessage(String message) {
-        Snackbar.make(getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+    private void showMessage(String message, String type) {
+        Toast toast = null;
+        if (type.equalsIgnoreCase("success")) {
+            toast = Toasty.success(this.getContext(), message);
+        } else if (type.equalsIgnoreCase("error")) {
+            toast = Toasty.error(this.getContext(), message);
+        } else if (type.equalsIgnoreCase("warning")) {
+            toast = Toasty.warning(this.getContext(), message);
+        } else {
+            toast = Toasty.normal(this.getContext(), message);
+        }
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 }
