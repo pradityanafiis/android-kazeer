@@ -28,8 +28,10 @@ import com.praditya.kazeer.api.Services;
 import com.praditya.kazeer.api.response.MultipleResponse;
 import com.praditya.kazeer.database.KazeerDatabase;
 import com.praditya.kazeer.model.Cart;
+import com.praditya.kazeer.model.Category;
 import com.praditya.kazeer.model.Product;
 import com.praditya.kazeer.view.DividerItemDecorator;
+import com.praditya.kazeer.view.adapter.CategoryFilterAdapter;
 import com.praditya.kazeer.view.adapter.ChooseProductAdapter;
 
 import java.text.NumberFormat;
@@ -45,10 +47,13 @@ import retrofit2.Response;
 
 public class ChooseProductFragment extends Fragment implements ChooseProductAdapter.OnClickCallback {
     private ChooseProductAdapter adapter;
+    private CategoryFilterAdapter filterAdapter;
     private Services services = ApiClient.getServices();
     private KazeerDatabase kazeerDatabase;
     @BindView(R.id.rv_product)
     RecyclerView rvProduct;
+    @BindView(R.id.rv_category_filter)
+    RecyclerView rvCategoryFilter;
     @BindView(R.id.progress_circular)
     ProgressBar progressBar;
     @BindView(R.id.tv_total_price)
@@ -106,7 +111,8 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
             case R.id.clear_cart:
                 kazeerDatabase.cartDao().clearCart();
                 showMessage("Cart cleared!", "success");
-                refreshProduct();
+                getCategory();
+                refreshProduct(0);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -114,6 +120,12 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
 
     private void init() {
         kazeerDatabase = KazeerDatabase.getInstance(getContext());
+
+        filterAdapter = new CategoryFilterAdapter(this.getContext());
+        rvCategoryFilter.setHasFixedSize(true);
+        rvCategoryFilter.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.HORIZONTAL, false));
+        rvCategoryFilter.setAdapter(filterAdapter);
+
         adapter = new ChooseProductAdapter(this.getContext());
         adapter.setOnClickCallback(this);
         rvProduct.setHasFixedSize(true);
@@ -121,12 +133,13 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
         rvProduct.setAdapter(adapter);
         RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecorator(ContextCompat.getDrawable(this.getContext(), R.drawable.divider));
         rvProduct.addItemDecoration(dividerItemDecoration);
-        refreshProduct();
+        getCategory();
+        refreshProduct(0);
     }
 
-    private void refreshProduct() {
+    private void refreshProduct(int categoryId) {
         showLoading(true);
-        services.getProductAvailable().enqueue(new Callback<MultipleResponse<Product>>() {
+        services.getProductAvailable(categoryId).enqueue(new Callback<MultipleResponse<Product>>() {
             @Override
             public void onResponse(Call<MultipleResponse<Product>> call, Response<MultipleResponse<Product>> response) {
                 showLoading(false);
@@ -146,6 +159,30 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
             }
         });
         setCartDetail();
+    }
+
+    private void getCategory() {
+        services.getCategory().enqueue(new Callback<MultipleResponse<Category>>() {
+            @Override
+            public void onResponse(Call<MultipleResponse<Category>> call, Response<MultipleResponse<Category>> response) {
+                boolean error = response.body().isError();
+                if (!error) {
+                    filterAdapter.setCategories(response.body().getData());
+                    filterAdapter.setOnClickCallBack(new CategoryFilterAdapter.OnClickCallBack() {
+                        @Override
+                        public void changeCategory(int categoryId) {
+                            refreshProduct(categoryId);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MultipleResponse<Category>> call, Throwable t) {
+                t.printStackTrace();
+                showMessage(t.getMessage(), "error");
+            }
+        });
     }
 
     private boolean isCartEmpty() {

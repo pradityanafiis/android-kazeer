@@ -38,6 +38,7 @@
                     android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_below="@id/tv_title_summary"
                     android:layerType="software"
                     android:src="@drawable/dotted_divider" />
@@ -50,9 +51,10 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ic_basket"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
                         android:src="@drawable/ic_baseline_shopping_basket_24" />
 
                     <LinearLayout
@@ -76,7 +78,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="102 Transactions"
-                            android:textSize="25sp"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -88,8 +90,8 @@
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ic_money"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_alignParentStart="true"
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_rupiah" />
@@ -115,7 +117,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Rp25.000.000"
-                            android:textSize="25sp"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </RelativeLayout>

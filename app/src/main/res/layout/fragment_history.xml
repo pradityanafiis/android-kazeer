@@ -21,41 +21,25 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_history_today"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
-                android:minWidth="75dp"
-                android:minHeight="40dp"
+                style="@style/ButtonFilterHistory"
                 android:text="Today"
                 android:textColor="@android:color/white"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_history_thisweek"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
-                android:minWidth="75dp"
-                android:minHeight="40dp"
+                style="@style/ButtonFilterHistory"
                 android:text="This Week"
                 android:textColor="@android:color/white"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_history_thismonth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
-                android:minWidth="75dp"
-                android:minHeight="40dp"
+                style="@style/ButtonFilterHistory"
                 android:text="This Month"
                 android:textColor="@android:color/white"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_history_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
-                android:minWidth="75dp"
-                android:minHeight="40dp"
+                style="@style/ButtonFilterHistory"
                 android:text="All"
                 android:textColor="@android:color/white"/>
         </LinearLayout>

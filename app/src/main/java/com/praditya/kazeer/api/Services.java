@@ -62,8 +62,10 @@ public interface Services {
     @GET("product")
     Call<MultipleResponse<Product>> getProduct();
 
-    @GET("product/available")
-    Call<MultipleResponse<Product>> getProductAvailable();
+    @GET("product/available/{category_id}")
+    Call<MultipleResponse<Product>> getProductAvailable(
+        @Path("category_id") int category_id
+    );
 
     @POST("product")
     Call<SingleResponse<Product>> createProduct(
