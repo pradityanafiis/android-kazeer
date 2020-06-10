@@ -82,8 +82,10 @@ public interface Services {
     );
 
     // SERVICES FOR TRANSACTION
-    @GET("transaction")
-    Call<MultipleResponse<Transaction>> getTransaction();
+    @GET("transaction/{range}")
+    Call<MultipleResponse<Transaction>> getTransaction(
+        @Path("range") String range
+    );
 
     @GET("transaction/summary")
     Call<SingleResponse<TransactionSummary>> getTransactionSummary();

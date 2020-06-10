@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.praditya.kazeer.R;
@@ -30,15 +32,18 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryActivity extends AppCompatActivity implements CategoryDialog.DialogListener {
-    @BindView(R.id.rv_category) RecyclerView rvCategory;
-    @BindView(R.id.progress_circular) ProgressBar progressBar;
+public class CategoryActivity extends AppCompatActivity implements CategoryAdapter.OnClickCallback, CategoryDialog.DialogListener {
     private CategoryAdapter adapter;
     private Services services = ApiClient.getServices();
+    @BindView(R.id.rv_category)
+    RecyclerView rvCategory;
+    @BindView(R.id.progress_circular)
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
 
     private void init() {
         adapter = new CategoryAdapter(CategoryActivity.this);
+        adapter.setOnClick(this);
         rvCategory.setHasFixedSize(true);
         rvCategory.setLayoutManager(new LinearLayoutManager(CategoryActivity.this));
         rvCategory.setAdapter(adapter);
@@ -96,18 +102,6 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
         return true;
     }
 
-    @OnClick(R.id.btn_create_category)
-    public void openCreateDialog() {
-        CategoryDialog categoryDialog = new CategoryDialog("Create Category", false);
-        categoryDialog.show(getSupportFragmentManager(), "Category");
-    }
-
-    private void openEditDialog(Category category) {
-        CategoryDialog categoryDialog = new CategoryDialog("Edit Category", true);
-        categoryDialog.setCategory(category);
-        categoryDialog.show(getSupportFragmentManager(), "Category");
-    }
-
     private void refreshCategory() {
         showLoading(true);
         services.getCategory().enqueue(new Callback<MultipleResponse<Category>>() {
@@ -118,19 +112,8 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
                 if (!error) {
                     ArrayList<Category> categories = response.body().getData();
                     adapter.setCategories(categories);
-                    adapter.setOnClick(new CategoryAdapter.OnClickCallback() {
-                        @Override
-                        public void destroyCategory(Category category) {
-                            deleteCategory(category);
-                        }
-
-                        @Override
-                        public void updateCategory(Category category) {
-                            openEditDialog(category);
-                        }
-                    });
-                }else {
-                    showMessage(response.body().getMessage());
+                } else {
+                    showMessage(response.body().getMessage(), "error");
                 }
             }
 
@@ -138,9 +121,15 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
             public void onFailure(Call<MultipleResponse<Category>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
+    }
+
+    @OnClick(R.id.btn_create_category)
+    public void openCreateDialog() {
+        CategoryDialog categoryDialog = new CategoryDialog("Create Category", false);
+        categoryDialog.show(getSupportFragmentManager(), "Category");
     }
 
     @Override
@@ -150,20 +139,27 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
             @Override
             public void onResponse(Call<SingleResponse<Category>> call, Response<SingleResponse<Category>> response) {
                 showLoading(false);
-                showMessage(response.body().getMessage());
                 boolean error = response.body().isError();
                 if (!error) {
                     refreshCategory();
                 }
+                showMessage(response.body().getMessage(), "success");
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Category>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
+    }
+
+    @Override
+    public void updateCategory(Category category) {
+        CategoryDialog categoryDialog = new CategoryDialog("Edit Category", true);
+        categoryDialog.setCategory(category);
+        categoryDialog.show(getSupportFragmentManager(), "Category");
     }
 
     @Override
@@ -177,19 +173,20 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
                 if (!error) {
                     refreshCategory();
                 }
-                showMessage(response.body().getMessage());
+                showMessage(response.body().getMessage(), "success");
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Category>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
 
-    private void deleteCategory(Category category) {
+    @Override
+    public void destroyCategory(Category category) {
         showLoading(true);
         services.deleteCategory(category.getId()).enqueue(new Callback<SingleResponse<Category>>() {
             @Override
@@ -199,26 +196,38 @@ public class CategoryActivity extends AppCompatActivity implements CategoryDialo
                 if (!error) {
                     refreshCategory();
                 }
-                showMessage(response.body().getMessage());
+                showMessage(response.body().getMessage(), "success");
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Category>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
 
-    private void showMessage(String message) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+    private void showMessage(String message, String type) {
+        Toast toast = null;
+        if (type.equalsIgnoreCase("success")) {
+            toast = Toasty.success(CategoryActivity.this, message);
+        } else if (type.equalsIgnoreCase("error")) {
+            toast = Toasty.error(CategoryActivity.this, message);
+        } else if (type.equalsIgnoreCase("warning")) {
+            toast = Toasty.warning(CategoryActivity.this, message);
+        } else {
+            toast = Toasty.normal(CategoryActivity.this, message);
+        }
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 
     private void showLoading(boolean visible) {
         if (visible) {
             progressBar.setVisibility(ProgressBar.VISIBLE);
-        }else {
+        } else {
             progressBar.setVisibility(ProgressBar.INVISIBLE);
         }
     }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,7 @@ public class ReviewCartFragment extends Fragment {
     @BindView(R.id.et_pay)
     EditText etPay;
     @BindView(R.id.btn_create_transaction)
-    Button btnCreateTransaction;
+    ImageButton btnCreateTransaction;
     @OnClick(R.id.btn_create_transaction)
     void onClickCreateTransaction() {
         Customer customer = (Customer) getArguments().getSerializable("customer");
@@ -91,7 +92,8 @@ public class ReviewCartFragment extends Fragment {
         rvProductList.addItemDecoration(dividerItemDecoration);
         tvNumberofItems.setText(getTotalItems() + " items");
         tvTotalPice.setText(formatRupiah(getTotalPrice()));
-        btnCreateTransaction.setVisibility(View.INVISIBLE);
+        btnCreateTransaction.setEnabled(false);
+        btnCreateTransaction.setImageAlpha(75);
         etPay.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -100,7 +102,6 @@ public class ReviewCartFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                btnCreateTransaction.setVisibility(View.INVISIBLE);
                 if (charSequence.length() != 0) {
                     String payString = charSequence.toString().trim();
                     int cashPayment = 0;
@@ -111,10 +112,12 @@ public class ReviewCartFragment extends Fragment {
                     }
 
                     if (cashPayment >= getTotalPrice()) {
-                        btnCreateTransaction.setVisibility(View.VISIBLE);
+                        btnCreateTransaction.setEnabled(true);
+                        btnCreateTransaction.setImageAlpha(255);
                         setCashPayment(cashPayment);
                     } else {
-                        btnCreateTransaction.setVisibility(View.INVISIBLE);
+                        btnCreateTransaction.setEnabled(false);
+                        btnCreateTransaction.setImageAlpha(75);
                     }
                 }
             }

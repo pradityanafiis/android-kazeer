@@ -89,6 +89,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         return transactions.size();
     }
 
+    public void clear() {
+        transactions.clear();
+        notifyDataSetChanged();
+    }
+
     private String formatRupiah(int number) {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
         return numberFormat.format(number);

@@ -11,7 +11,9 @@
         android:id="@+id/tv_title_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-            android:text="Customer Name" />
+        style="@style/StandartTextView"
+        android:textStyle="bold"
+        android:text="Name" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_customer_name"
@@ -19,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title_name"
+        android:layout_marginBottom="10dp"
         android:textSize="18sp"
-        android:textStyle="bold"
         tools:text="@tools:sample/full_names" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -28,7 +30,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_customer_name"
-        android:text="Customer Telephone" />
+        style="@style/StandartTextView"
+        android:textStyle="bold"
+        android:text="Telephone" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_customer_telephone"
@@ -36,8 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title_telephone"
+        android:layout_marginBottom="10dp"
         android:textSize="18sp"
-        android:textStyle="bold"
         tools:text="@tools:sample/us_phones" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -45,7 +49,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_customer_telephone"
-        android:text="Customer Address" />
+        style="@style/StandartTextView"
+        android:textStyle="bold"
+        android:text="Address" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_customer_address"
@@ -54,6 +60,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_title_address"
         android:textSize="18sp"
-        android:textStyle="bold"
         tools:text="@tools:sample/cities" />
 </RelativeLayout>

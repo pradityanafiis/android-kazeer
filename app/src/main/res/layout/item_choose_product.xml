@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/tv_quantity"
             style="@style/StandartTextView"
-            android:textStyle="bold"
             tools:text="@tools:sample/lorem"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_product_price"

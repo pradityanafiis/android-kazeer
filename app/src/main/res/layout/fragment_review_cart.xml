@@ -102,21 +102,33 @@
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/et_pay"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="15dp"
-                android:inputType="number" />
+                android:padding="10dp">
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toStartOf="@id/btn_create_transaction"
+                    android:inputType="number" />
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@id/btn_create_transaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/ic_round_check_circle_24"/>
+            </RelativeLayout>
         </androidx.cardview.widget.CardView>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_create_transaction"
-            style="@style/BaseButton"
-            android:layout_below="@id/cv_payment"
-            android:background="@drawable/btn_primary"
-            android:text="Place Transaction"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/btn_create_transaction"-->
+<!--            style="@style/BaseButton"-->
+<!--            android:layout_below="@id/cv_payment"-->
+<!--            android:background="@drawable/btn_primary"-->
+<!--            android:text="Place Transaction"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textStyle="bold" />-->
     </RelativeLayout>
 </ScrollView>

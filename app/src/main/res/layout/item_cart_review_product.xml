@@ -1,41 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_quantity"
+        style="@style/QuantityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
-        android:padding="5dp"
         android:background="@drawable/quantity_border"
-        style="@style/QuantityTextView"
-        tools:text="10"/>
+        android:padding="5dp"
+        tools:text="10" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_product_name"
+        style="@style/StandartTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/tv_total_price"
-        android:layout_toEndOf="@+id/tv_quantity"
         android:layout_centerInParent="true"
         android:layout_marginLeft="10dp"
-        style="@style/StandartTextView"
-        tools:text="@tools:sample/lorem"/>
+        android:layout_toStartOf="@id/tv_total_price"
+        android:layout_toEndOf="@+id/tv_quantity"
+        tools:text="@tools:sample/lorem" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_total_price"
+        style="@style/StandartTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        style="@style/StandartTextView"
-        tools:text="Rp25.000"/>
+        tools:text="Rp25.000" />
 
 </RelativeLayout>

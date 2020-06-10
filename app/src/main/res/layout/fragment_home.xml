@@ -28,16 +28,25 @@
                     style="@style/StandartTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center"
                     android:text="Monthly Transaction Summary"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_below="@id/tv_title_summary"
+                    android:layerType="software"
+                    android:src="@drawable/dotted_divider" />
 
                 <RelativeLayout
                     android:id="@+id/content_not"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_title_summary">
+                    android:layout_below="@id/divider">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ic_basket"
@@ -56,6 +65,7 @@
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/StandartTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Number of Transaction" />
@@ -94,6 +104,7 @@
                         android:orientation="vertical">
 
                         <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/StandartTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Amount of Transaction" />
@@ -130,16 +141,26 @@
                     style="@style/StandartTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:gravity="center"
                     android:text="Last Week Transaction"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_below="@id/tv_title_chart"
+                    android:layout_marginBottom="10dp"
+                    android:layerType="software"
+                    android:src="@drawable/dotted_divider" />
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/transaction_chart"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:layout_below="@id/tv_title_chart" />
+                    android:layout_below="@id/divider2" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
