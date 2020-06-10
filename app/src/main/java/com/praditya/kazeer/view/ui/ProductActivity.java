@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.praditya.kazeer.R;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,7 +110,7 @@ public class ProductActivity extends AppCompatActivity implements ProductAdapter
                 if (!error) {
                     adapter.setProducts(response.body().getData());
                 }else {
-                    showMessage(response.body().getMessage());
+                    showMessage(response.body().getMessage(), "error");
                 }
             }
 
@@ -115,7 +118,7 @@ public class ProductActivity extends AppCompatActivity implements ProductAdapter
             public void onFailure(Call<MultipleResponse<Product>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -134,16 +137,19 @@ public class ProductActivity extends AppCompatActivity implements ProductAdapter
             public void onResponse(Call<SingleResponse<Product>> call, Response<SingleResponse<Product>> response) {
                 showLoading(false);
                 boolean error = response.body().isError();
-                if (!error)
+                if (!error) {
                     refreshProduct();
-                showMessage(response.body().getMessage());
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
+                }
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Product>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -158,15 +164,17 @@ public class ProductActivity extends AppCompatActivity implements ProductAdapter
                 boolean error = response.body().isError();
                 if (!error) {
                     refreshProduct();
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
                 }
-                showMessage(response.body().getMessage());
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Product>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -186,16 +194,19 @@ public class ProductActivity extends AppCompatActivity implements ProductAdapter
             public void onResponse(Call<SingleResponse<Product>> call, Response<SingleResponse<Product>> response) {
                 showLoading(false);
                 boolean error = response.body().isError();
-                if (!error)
+                if (!error) {
                     refreshProduct();
-                showMessage(response.body().getMessage());
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
+                }
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Product>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -214,22 +225,37 @@ public class ProductActivity extends AppCompatActivity implements ProductAdapter
             public void onResponse(Call<SingleResponse<Product>> call, Response<SingleResponse<Product>> response) {
                 showLoading(false);
                 boolean error = response.body().isError();
-                if (!error)
+                if (!error) {
                     refreshProduct();
-                showMessage(response.body().getMessage());
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
+                }
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Product>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
 
-    private void showMessage(String message) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+    private void showMessage(String message, String type) {
+        Toast toast = null;
+        if (type.equalsIgnoreCase("success")) {
+            toast = Toasty.success(ProductActivity.this, message);
+        } else if (type.equalsIgnoreCase("error")) {
+            toast = Toasty.error(ProductActivity.this, message);
+        } else if (type.equalsIgnoreCase("warning")) {
+            toast = Toasty.warning(ProductActivity.this, message);
+        } else {
+            toast = Toasty.normal(ProductActivity.this, message);
+        }
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 
     private void showLoading(boolean visible) {

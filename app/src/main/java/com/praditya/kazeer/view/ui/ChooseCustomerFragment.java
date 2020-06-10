@@ -149,11 +149,11 @@ public class ChooseCustomerFragment extends Fragment implements ChooseCustomerAd
 
     private void showMessage(String message, String type) {
         Toast toast = null;
-        if (type == "success") {
+        if (type.equalsIgnoreCase("success")) {
             toast = Toasty.success(this.getContext(), message);
-        } else if (type == "error") {
+        } else if (type.equalsIgnoreCase("error")) {
             toast = Toasty.error(this.getContext(), message);
-        } else if (type == "warning") {
+        } else if (type.equalsIgnoreCase("warning")) {
             toast = Toasty.warning(this.getContext(), message);
         } else {
             toast = Toasty.normal(this.getContext(), message);

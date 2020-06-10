@@ -4,9 +4,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import com.praditya.kazeer.model.Category;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 public class CategoryDialog extends AppCompatDialogFragment {
     @BindView(R.id.et_category_name) EditText etCategoryName;
@@ -87,7 +90,7 @@ public class CategoryDialog extends AppCompatDialogFragment {
         String name = etCategoryName.getText().toString().trim();
 
         if (name.isEmpty()) {
-            showMessage("Category name required");
+            showMessage("Category name required", "error");
             ready = false;
         }
 
@@ -102,7 +105,19 @@ public class CategoryDialog extends AppCompatDialogFragment {
         }
     }
 
-    private void showMessage(String message) {
-        Snackbar.make(getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+    private void showMessage(String message, String type) {
+        Toast toast = null;
+        if (type.equalsIgnoreCase("success")) {
+            toast = Toasty.success(this.getContext(), message);
+        } else if (type.equalsIgnoreCase("error")) {
+            toast = Toasty.error(this.getContext(), message);
+        } else if (type.equalsIgnoreCase("warning")) {
+            toast = Toasty.warning(this.getContext(), message);
+        } else {
+            toast = Toasty.normal(this.getContext(), message);
+        }
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 }

@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.praditya.kazeer.R;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -108,7 +111,7 @@ public class CustomerActivity extends AppCompatActivity implements CustomerAdapt
                     ArrayList<Customer> customers = response.body().getData();
                     adapter.setCustomers(customers);
                 }else {
-                    showMessage(response.body().getMessage());
+                    showMessage(response.body().getMessage(), "error");
                 }
             }
 
@@ -116,7 +119,7 @@ public class CustomerActivity extends AppCompatActivity implements CustomerAdapt
             public void onFailure(Call<MultipleResponse<Customer>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -137,15 +140,17 @@ public class CustomerActivity extends AppCompatActivity implements CustomerAdapt
                 boolean error = response.body().isError();
                 if (!error) {
                     refreshCustomer();
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
                 }
-                showMessage(response.body().getMessage());
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Customer>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -160,15 +165,17 @@ public class CustomerActivity extends AppCompatActivity implements CustomerAdapt
                 boolean error = response.body().isError();
                 if (!error) {
                     refreshCustomer();
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
                 }
-                showMessage(response.body().getMessage());
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Customer>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -190,15 +197,17 @@ public class CustomerActivity extends AppCompatActivity implements CustomerAdapt
                 boolean error = response.body().isError();
                 if (!error) {
                     refreshCustomer();
+                    showMessage(response.body().getMessage(), "success");
+                } else {
+                    showMessage(response.body().getMessage(), "error");
                 }
-                showMessage(response.body().getMessage());
             }
 
             @Override
             public void onFailure(Call<SingleResponse<Customer>> call, Throwable t) {
                 showLoading(false);
                 t.printStackTrace();
-                showMessage(t.getMessage());
+                showMessage(t.getMessage(), "error");
             }
         });
     }
@@ -210,8 +219,20 @@ public class CustomerActivity extends AppCompatActivity implements CustomerAdapt
 
     }
 
-    private void showMessage(String message) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+    private void showMessage(String message, String type) {
+        Toast toast = null;
+        if (type.equalsIgnoreCase("success")) {
+            toast = Toasty.success(CustomerActivity.this, message);
+        } else if (type.equalsIgnoreCase("error")) {
+            toast = Toasty.error(CustomerActivity.this, message);
+        } else if (type.equalsIgnoreCase("warning")) {
+            toast = Toasty.warning(CustomerActivity.this, message);
+        } else {
+            toast = Toasty.normal(CustomerActivity.this, message);
+        }
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
     }
 
     private void showLoading(boolean visible) {

@@ -213,34 +213,6 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
         tvTotalPrice.setText(formatRupiah(totalPrice));
     }
 
-    private void showMessage(String message, String type) {
-        Toast toast = null;
-        if (type == "success") {
-            toast = Toasty.success(this.getContext(), message);
-        } else if (type == "error") {
-            toast = Toasty.error(this.getContext(), message);
-        } else if (type == "warning") {
-            toast = Toasty.warning(this.getContext(), message);
-        } else {
-            toast = Toasty.normal(this.getContext(), message);
-        }
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.show();
-    }
-
-    private void showLoading(boolean visible) {
-        if (visible)
-            progressBar.setVisibility(ProgressBar.VISIBLE);
-        else
-            progressBar.setVisibility(ProgressBar.INVISIBLE);
-    }
-
-    private String formatRupiah(int number) {
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
-        return numberFormat.format(number);
-    }
-
     @Override
     public void addToCart(Product product) {
         Cart cart = getSingleCart(product);
@@ -278,5 +250,33 @@ public class ChooseProductFragment extends Fragment implements ChooseProductAdap
             }
             setCartDetail();
         }
+    }
+
+    private String formatRupiah(int number) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("in", "ID"));
+        return numberFormat.format(number);
+    }
+
+    private void showMessage(String message, String type) {
+        Toast toast = null;
+        if (type == "success") {
+            toast = Toasty.success(this.getContext(), message);
+        } else if (type == "error") {
+            toast = Toasty.error(this.getContext(), message);
+        } else if (type == "warning") {
+            toast = Toasty.warning(this.getContext(), message);
+        } else {
+            toast = Toasty.normal(this.getContext(), message);
+        }
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.show();
+    }
+
+    private void showLoading(boolean visible) {
+        if (visible)
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+        else
+            progressBar.setVisibility(ProgressBar.INVISIBLE);
     }
 }
